@@ -27,8 +27,12 @@ int main() {
     // Scores
     int score_left =  0;
     int score_right = 0;
+    int max_score = 9;
 
+    int delay = 1;
     int speed = 4;
+
+    int ball_size = 12;
 
     //480
     int arr[60];
@@ -65,7 +69,6 @@ int main() {
                 left_y += speed;
             }
 
-
             if (IsKeyDown(KEY_UP) && right_y >= 0) {
                 right_y -= speed;
             }
@@ -75,6 +78,8 @@ int main() {
 
             DrawRectangle(space_from_back, left_y, player_width, player_height, WHITE);
             DrawRectangle(GetScreenWidth() - (space_from_back + player_width), right_y, player_width, player_height, WHITE);
+
+            //DrawRectangle(200, 200, ball_size, ball_size, WHITE);
 
         EndDrawing();
     }
