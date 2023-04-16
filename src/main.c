@@ -38,8 +38,10 @@ int main() {
     int max_score = 9;
 
     // Gameplay
-    int delay = 1;
+    int time = 0;
+    int delay = 40;
     int speed = 4;
+    bool start;
 
     // Grid in middle
     int grid_size = 8;
@@ -57,13 +59,13 @@ int main() {
     float x = cos(angle) * 50;
     float y = sin(angle) * 50;
 
-    Vector2 target = {ball_pos.x + ball_size/2 + x, ball_pos.y + ball_size/2 + y };
-
     int flip_left = GetRandomValue(0, 1);
     if (flip_left == 1) {
         x = x * -1;
         y = y * -1;
     }
+
+    Vector2 target = {ball_pos.x + ball_size/2 + x, ball_pos.y + ball_size/2 + y };
 
     // Player
     Player player_left = { true, 12, 72, 32, screen_center_y - 36 };
@@ -89,6 +91,17 @@ int main() {
             DrawPlayer(&player_right);
 
             DrawRectangle(ball_pos.x, ball_pos.y, ball_size, ball_size, WHITE);
+
+            if (time < delay && start == false) {
+                time += 1.0f;
+            } else {
+                start = true;
+            }
+
+            if (start) {
+                ball_pos.x = target.x / 200;
+                ball_pos.y = target.y / 200;
+            }
 
             // Debug-ish
             DrawLine(ball_pos.x + ball_size/2, ball_pos.y + ball_size/2, target.x, target.y, RED);
