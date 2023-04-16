@@ -12,9 +12,11 @@ void DrawPlayer(Player* player) {
     DrawRectangle(player -> space_from_back, player -> y_pos, player -> width, player -> height, WHITE);
 }
 
-void DrawGridLine(int size, int spacing) {
+void DrawGridLine(int size, int spacing, int gap) {
     for (int i = spacing/2; i <= GetScreenHeight(); i += size + spacing) {
-        DrawRectangle(GetScreenWidth() / 2 - size / 2, i, size, size, RAYWHITE);
+        if (i <= GetScreenHeight() / 2 - gap || i >= GetScreenHeight() / 2 + gap) {
+            DrawRectangle(GetScreenWidth() / 2 - size / 2, i, size, size, RAYWHITE);
+        }
     }
 }
 
@@ -41,6 +43,7 @@ int main() {
     // Grid in middle
     int grid_size = 8;
     int grid_spacing = 22;
+    int grid_gap_middle = 44;
 
     Player player_left = { true, 12, 72, 32, screen_center_y - 36 };
     Player player_right = { false, 12, 72, GetScreenWidth() - 32 - 12, screen_center_y - 36 };
@@ -49,7 +52,7 @@ int main() {
         BeginDrawing();
             ClearBackground(BLACK);
 
-            DrawGridLine(grid_size, grid_spacing);
+            DrawGridLine(grid_size, grid_spacing, grid_gap_middle);
 
             if (IsKeyDown(KEY_W) && player_left.y_pos >= 0) { player_left.y_pos -= speed; }
             if (IsKeyDown(KEY_S) && player_left.y_pos <= GetScreenHeight() - player_left.height) { 
