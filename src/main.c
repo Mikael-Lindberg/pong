@@ -1,4 +1,5 @@
 #include <raylib.h>
+#include <math.h>
 
 struct Player {
     bool is_left_player;
@@ -14,7 +15,7 @@ void DrawPlayer(Player* player) {
 
 void DrawGridLine(int size, int spacing, int gap) {
     for (int i = spacing/2; i <= GetScreenHeight(); i += size + spacing) {
-        if (i <= GetScreenHeight() / 2 - gap || i >= GetScreenHeight() / 2 + gap) {
+        if (i <= GetScreenHeight() / 2 - gap - size || i >= GetScreenHeight() / 2 + gap) {
             DrawRectangle(GetScreenWidth() / 2 - size / 2, i, size, size, RAYWHITE);
         }
     }
@@ -45,6 +46,26 @@ int main() {
     int grid_spacing = 22;
     int grid_gap_middle = 44;
 
+    // Ball
+    int ball_size = 16;
+    Vector2 ball_pos = { (float)screen_center_x - ball_size / 2, (float)screen_center_y - ball_size / 2 };
+
+    // Testing random ball direction
+    float width_angle = 20;
+    float angle = GetRandomValue(- width_angle, width_angle) * DEG2RAD;
+
+    float x = cos(angle) * 50;
+    float y = sin(angle) * 50;
+
+    Vector2 target = {ball_pos.x + ball_size/2 + x, ball_pos.y + ball_size/2 + y };
+
+    int flip_left = GetRandomValue(0, 1);
+    if (flip_left == 1) {
+        x = x * -1;
+        y = y * -1;
+    }
+
+    // Player
     Player player_left = { true, 12, 72, 32, screen_center_y - 36 };
     Player player_right = { false, 12, 72, GetScreenWidth() - 32 - 12, screen_center_y - 36 };
 
@@ -67,7 +88,11 @@ int main() {
             DrawPlayer(&player_left);
             DrawPlayer(&player_right);
 
-            //DrawRectangle(200, 200, ball_size, ball_size, WHITE);
+            DrawRectangle(ball_pos.x, ball_pos.y, ball_size, ball_size, WHITE);
+
+            // Debug-ish
+            DrawLine(ball_pos.x + ball_size/2, ball_pos.y + ball_size/2, target.x, target.y, RED);
+            DrawRectangle(target.x - 5, target.y - 5, 10, 10, RED);
 
         EndDrawing();
     }
